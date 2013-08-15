@@ -41,6 +41,12 @@ Note
 ----
 There are some important bugs in `SolarHijri`. Do not use it for production yet.
 
+Useful Links
+------------
+[UnixTime](http://en.wikipedia.org/wiki/Unix_time "Unix Time")
+[date_parse_from_format](http://php.net/manual/en/function.date-parse-from-format.php "date_parse_from_format")
+[createfromformat](http://php.net/manual/en/datetime.createfromformat.php "createfromformat")
+
 More
 ----
 Fork and add your calendar.
