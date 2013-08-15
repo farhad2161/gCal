@@ -26,11 +26,11 @@ by calling your implemented methods via reflection.
 How to use
 ----------
 Just call the static `convert` method from `gCal.php`
-`
-$solarHijri = '1392/05/24 11:01:02';
-//convert to Gregorian
-gCal::convert('Y/m/d H:i:s', $solarHijri, SolarHijri::calendarName(), 'Y-m-d H:i:s', Gregorian::calendarName());
-`
+
+    $solarHijri = '1392/05/24 11:01:02';
+    //convert to Gregorian
+    gCal::convert('Y/m/d H:i:s', $solarHijri, SolarHijri::calendarName(), 'Y-m-d H:i:s', Gregorian::calendarName());
+
 
 Requirement
 -----------
