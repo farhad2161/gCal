@@ -27,9 +27,17 @@ How to use
 ----------
 Just call the static `convert` method from `gCal.php`
 
+    function convert(
+        $sourceFormat, $sourceDate, $sourceCalendarName,
+        $destinationFormat, $destinationCalendarName
+    )
+
     $solarHijri = '1392/05/24 11:01:02';
     //convert to Gregorian
-    gCal::convert('Y/m/d H:i:s', $solarHijri, SolarHijri::calendarName(), 'Y-m-d H:i:s', Gregorian::calendarName());
+    gCal::convert(
+        'Y/m/d H:i:s', $solarHijri, SolarHijri::calendarName(),
+        'Y-m-d H:i:s', Gregorian::calendarName()
+    );
 
 
 Requirement
