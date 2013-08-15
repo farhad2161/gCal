@@ -17,8 +17,8 @@ There is a Sample Class in `calendar` folder. All thing you need to create your 
 calendar type is to create a class like `Sample.php` and extend it from `BaseCalendar.php`.
 `BaseCalendar` is an abstract class and you should implement to method for it to work:
 
-1. function convertToUnixTimeStamp($format, $date)
-2. function revertFromUnixTimeStamp($format, $timestamp)
+1.  function convertToUnixTimeStamp($format, $date)
+2.  function revertFromUnixTimeStamp($format, $timestamp)
 
 After implementing this two method, `convert` method in `gCal.php` will convert date
 by calling your implemented methods via reflection.
@@ -35,7 +35,7 @@ Just call the static `convert` method from `gCal.php`
 Requirement
 -----------
 
-PHP 5.3+
+>*   PHP 5.3+
 
 Note
 ----
