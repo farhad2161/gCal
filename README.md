@@ -57,5 +57,5 @@ Useful Links
 
 More
 ----
-Fork and add your calendar.
+Request for pull or fork and add your calendar.
 Thanks
