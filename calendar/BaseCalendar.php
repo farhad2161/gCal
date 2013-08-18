@@ -4,7 +4,6 @@
  * This is an abstract class which all calendar class should extend it.
  *
  * @author Farhad Kia
- * @email farhad2161@yahoo.com
  */
 abstract class BaseCalendar {
 

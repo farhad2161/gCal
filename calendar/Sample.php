@@ -8,7 +8,6 @@ require_once 'BaseCalendar.php';
  * is in BaseCalendar.
  *
  * @author Your name
- * @email Your email
  */
 class Sample extends BaseCalendar {
 

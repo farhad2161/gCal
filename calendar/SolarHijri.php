@@ -5,7 +5,6 @@
  * @notice This class has so many bugs at this time.
  *
  * @author Farhad Kia
- * @email farhad2161@yahoo.com
  */
 class SolarHijri extends BaseCalendar {
 

@@ -10,7 +10,6 @@
  * Then we can convert all calendars to each other.
  *
  * @author Farhad Kia
- * @email farhad2161@yahoo.com
  */
 class gCal {
 

@@ -4,9 +4,8 @@ require_once 'BaseCalendar.php';
 
 /**
  * This class will convert Gregorian to unix and vise versa.
- * 
+ *
  * @author Farhad Kia
- * @email farhad2161@yahoo.com
  */
 class Gregorian extends BaseCalendar {
 
