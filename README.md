@@ -6,9 +6,16 @@ Php Global Calendar Convert - convert all calendar type to each other so simple.
 What is gCal
 ------------
 
-Global calendar is simple code to translate all calendars like Solar Hijri, Gregorian and ...
-to each other. gCal try to convert source calendars to Unix timestamp and then convert the
-Unix time to destination calendar.
+Global calendar is simple code to translate all calendars like Solar Hijri(Shamsi,Jalali,... ), Gregorian and ...
+to each other. gCal try to find the count of days between source calendar and Millenium(2000-01-01), then calculate the
+the destination calendar according to this gap.
+
+For example, in order to convert 1392/05/28 from Solar Hijri to Gregorian we do this stuff
+1.  Find equivalent to millenium(2000-01-01) in Solar Hijri.(1378-10-11 is equal to 2000-01-01)
+2.  Calculate count of days between 1392/05/28 and 1378-10-11 (Should be positive or negative).
+    We do this in `gapUntilMillenium` method and result should be 4979.
+3.  Calculate destination calendar by adding 4979 to equivalent millenium date(In Gregorian 2000-01-01 is
+    equal to millenium(2000-01-01)).We do this in `revertFromMillenium` method and result should be 2013-08-19.
 
 How to add your calendar
 ------------------------
@@ -17,8 +24,8 @@ There is a Sample Class in `calendar` folder. All thing you need to create your 
 calendar type is to create a class like `Sample.php` and extend it from `BaseCalendar.php`.
 `BaseCalendar` is an abstract class and you should implement to method for it to work:
 
-1.  function convertToUnixTimeStamp($format, $date)
-2.  function revertFromUnixTimeStamp($format, $timestamp)
+1.  function gapUntilMillenium($year, $month, $day)
+2.  function revertFromMillenium($daysUntilMillenium)
 
 After implementing this two method, `convert` method in `gCal.php` will convert date
 by calling your implemented methods via reflection.
@@ -44,16 +51,6 @@ Requirement
 -----------
 
 >*   PHP 5.3+
-
-Note
-----
-There are some important bugs in `SolarHijri`. Do not use it for production yet.
-
-Useful Links
-------------
->*  [UnixTime](http://en.wikipedia.org/wiki/Unix_time "Unix Time")
->*  [date_parse_from_format](http://php.net/manual/en/function.date-parse-from-format.php "date_parse_from_format")
->*  [createfromformat](http://php.net/manual/en/datetime.createfromformat.php "createfromformat")
 
 More
 ----

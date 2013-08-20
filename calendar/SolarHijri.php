@@ -1,302 +1,145 @@
 <?php
 
+require_once 'BaseCalendar.php';
+
 /**
- * This class will convert Solar Hijri to unix and vise versa.
- * @notice This class has so many bugs at this time.
+ * SolarHijri calendar required methods for converting and reverting to or from Millenium(2000-01-01 equal to 1378-10-11)
  *
  * @author Farhad Kia
  */
 class SolarHijri extends BaseCalendar {
 
-    /**
-     * Covert Solar Hijri date to Unix time stamp.
-     * @param string $format format of date string.
-     * @param string $date A date for convert to Unix timestamp.
-     * @return int return Unix timestamp.
-     */
-    public function convertToUnixTimeStamp($format, $date) {
-        return self::shDateDifference($format, $date, 'Y-m-d H:i:s', '1348-10-11 01:00:00');
+    public function gapUntilMillenium($year, $month, $day) {
+        //1378-10-11 is equal to 2000-01-01
+        return self::shDateDifference($year, $month, $day, 1378, 10, 11);
     }
 
-    /**
-     * Revert timestamp to Solar Hijri date.
-     * @param string $format format of returning result.
-     * @param string $timestamp Unix timestamp.
-     * @return string return date in given format.
-     */
-    public function revertFromUnixTimeStamp($format, $timestamp) {
-
-        $year = 1348;
+    public function revertFromMillenium($daysUntilMillenium) {
+        //1378-10-11 is equal to 2000-01-01
+        $year = 1378;
         $month = 10;
         $day = 11;
-        $hour = 1;
-        $minute = 0;
-        $second = 0;
-
-        $timestamp = $timestamp - (22 * 60 * 60) - ((30 + 29 + 19) * 24 * 60 * 60);
-        $year = 1349;
-        $month = 1;
-        $day = 1;
-        $hour = 0;
-        $minute = 0;
-        $second = 0;
-
-        while ($timestamp > 0) {
-            $availableSecond = self::shYearDayCount($year) * 24 * 60 * 60;
-            if ($timestamp < $availableSecond) break;
-            $year++;
-            $timestamp-=$availableSecond;
-        }
-
-        while ($timestamp > 0) {
-            $availableSecond = self::shMonthDayCount($month, $year) * 24 * 60 * 60;
-            if ($timestamp < $availableSecond) break;
-            $month++;
-            if ($month > 12) {
+        if ($daysUntilMillenium > 0) {
+            while ($daysUntilMillenium >= self::shYearDayCount($year)) {
+                $daysUntilMillenium-=self::shYearDayCount($year);
                 $year++;
-                $month = 1;
             }
-            $timestamp-=$availableSecond;
-        }
-
-        while ($timestamp > 0) {
-            $availableSecond = 24 * 60 * 60;
-            if ($timestamp < $availableSecond) break;
-            $day++;
-            if ($day > self::shMonthDayCount($month, $year)) {
+            while ($daysUntilMillenium >= self::shMonthDayCount($month, $year)) {
+                $daysUntilMillenium-=self::shMonthDayCount($month, $year);
                 $month++;
                 if ($month > 12) {
-                    $year++;
                     $month = 1;
+                    $year++;
                 }
-                $day = 1;
             }
-            $timestamp-=$availableSecond;
-        }
-
-        while ($timestamp > 0) {
-            $availableSecond = 60 * 60;
-            if ($timestamp < $availableSecond) break;
-            $hour++;
-            if ($hour > 23) {
+            while ($daysUntilMillenium > 0) {
+                $daysUntilMillenium--;
                 $day++;
                 if ($day > self::shMonthDayCount($month, $year)) {
+                    $day = 1;
                     $month++;
                     if ($month > 12) {
-                        $year++;
                         $month = 1;
+                        $year++;
                     }
-                    $day = 1;
                 }
-                $hour = 0;
             }
-            $timestamp-=$availableSecond;
+        } else {
+            $daysUntilMillenium*=-1;
+            while ($daysUntilMillenium >= self::shYearDayCount($year - 1)) {
+                $daysUntilMillenium-=self::shYearDayCount($year - 1);
+                $year--;
+            }
+            while ($daysUntilMillenium >= self::shMonthDayCount($month - 1 == 0 ? 12 : $month - 1, $year)) {
+                $daysUntilMillenium-=self::shMonthDayCount($month - 1 == 0 ? 12 : $month - 1, $year);
+                $month--;
+                if ($month < 1) {
+                    $month = 12;
+                    $year--;
+                }
+            }
+            while ($daysUntilMillenium > 0) {
+                $daysUntilMillenium--;
+                $day--;
+                if ($day < 1) {
+                    $day = self::shMonthDayCount($month - 1 == 0 ? 12 : $month - 1, $year);
+                    $month--;
+                    if ($month < 1) {
+                        $month = 12;
+                        $year--;
+                    }
+                }
+            }
         }
 
-        while ($timestamp > 0) {
-            $availableSecond = 60;
-            if ($timestamp < $availableSecond) break;
-            $minute++;
-            if ($minute > 59) {
-                $hour++;
-                if ($hour > 23) {
-                    $day++;
-                    if ($day > self::shMonthDayCount($month, $year)) {
-                        $month++;
-                        if ($month > 12) {
-                            $year++;
-                            $month = 1;
-                        }
-                        $day = 1;
-                    }
-                    $hour = 0;
-                }
-                $minute = 0;
-            }
-            $timestamp-=$availableSecond;
-        }
-
-        while ($timestamp > 0) {
-            $availableSecond = 1;
-            if ($timestamp < $availableSecond) break;
-            $second++;
-            if ($second > 59) {
-                $minute++;
-                if ($minute > 59) {
-                    $hour++;
-                    if ($hour > 23) {
-                        $day++;
-                        if ($day > self::shMonthDayCount($month, $year)) {
-                            $month++;
-                            if ($month > 12) {
-                                $year++;
-                                $month = 1;
-                            }
-                            $day = 1;
-                        }
-                        $hour = 0;
-                    }
-                    $minute = 0;
-                }
-                $second = 0;
-            }
-            $timestamp-=$availableSecond;
-        }
-
-        if ($minute < 10) $minute = '0' . $minute;
-        if ($second < 10) $second = '0' . $second;
-        $date = $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $minute . ':' . $second;
-        $date = DateTime::createFromFormat('Y-n-j G:i:s', $date);
-        return $date->format($format);
+        return array('year' => $year, 'month' => $month, 'day' => $day);
     }
 
-    /**
-     * Calculate differnce between to Solar Hijiri date in second
-     * @param string $format1 first date format string
-     * @param string $date1 first date
-     * @param string $format2 second date format string
-     * @param string $date2 second date
-     * @return int diffirence in second
-     */
-    static function shDateDifference($format1, $date1, $format2, $date2) {
-        $total_day = $year_day = $month_day = $day = $date1_month_day = $date2_month_day =
-                $date1_day = $date2_day = $hour = $minute = $second = $hour1 = $minute1 = $second1 =
-                $hour2 = $minute2 = $second2 = 0;
+    static function shDateDifference($year1, $month1, $day1, $year2, $month2, $day2) {
+        $total_day = $year_day = $month_day = $day = $date1_month_day = $date2_month_day = $date1_day = $date2_day = 0;
 
-        $date1 = date_parse_from_format($format1, $date1);
-        $date2 = date_parse_from_format($format2, $date2);
-
-        if ($date1['second'] === FALSE) $date1['second'] = 0;
-        if ($date2['second'] === FALSE) $date2['second'] = 0;
-
-        if ($date1['year'] > $date2['year']) {
+        if ($year1 > $year2) {
             //Year Gap
-            for ($i = $date2['year'] + 1; $i < $date1['year']; $i++) {
+            for ($i = $year2 + 1; $i < $year1; $i++) {
                 $year_day+=self::shYearDayCount($i);
             }
             //Month Gap
-            for ($i = 1; $i < $date1['month']; $i++) {
-                $month_day+=self::shMonthDayCount($i, $date1['year']);
+            for ($i = 1; $i < $month1; $i++) {
+                $month_day+=self::shMonthDayCount($i, $year1);
             }
-            for ($i = $date2['month'] + 1; $i <= 12; $i++) {
-                $month_day+=self::shMonthDayCount($i, $date2['year']);
+            for ($i = $month2 + 1; $i <= 12; $i++) {
+                $month_day+=self::shMonthDayCount($i, $year2);
             }
             //Day Gap
-            for ($i = 1; $i < $date1['day']; $i++) {
+            for ($i = 1; $i <= $day1; $i++) {
                 $day+=1;
             }
-            for ($i = $date2['day'] + 1; $i <= self::shMonthDayCount($date2['month'], $date2['year']); $i++) {
+            for ($i = $day2 + 1; $i <= self::shMonthDayCount($month2, $year2); $i++) {
                 $day+=1;
-            }
-            //Hour Gap
-            for ($i = 0; $i < $date1['hour']; $i++) {
-                $hour+=1;
-            }
-            for ($i = $date2['hour'] + 1; $i <= 23; $i++) {
-                $hour+=1;
-            }
-            //Minute Gap
-            for ($i = 0; $i < $date1['minute']; $i++) {
-                $minute+=1;
-            }
-            for ($i = $date2['minute'] + 1; $i <= 59; $i++) {
-                $minute+=1;
-            }
-            //Second Gap
-            for ($i = 0; $i < $date1['second']; $i++) {
-                $second+=1;
-            }
-            for ($i = $date2['second']; $i <= 59; $i++) {
-                $second+=1;
             }
 
             $total_day = $year_day + $month_day + $day;
-        } else if ($date1['year'] < $date2['year']) {
+        } else if ($year1 < $year2) {
             //Year Gap
-            for ($i = $date1['year'] + 1; $i < $date2['year']; $i++) {
+            for ($i = $year1 + 1; $i < $year2; $i++) {
                 $year_day+=self::shYearDayCount($i);
             }
             //Month Gap
-            for ($i = 1; $i < $date2['month']; $i++) {
-                $month_day+=self::shMonthDayCount($i, $date2['year']);
+            for ($i = 1; $i < $month2; $i++) {
+                $month_day+=self::shMonthDayCount($i, $year2);
             }
-            for ($i = $date1['month'] + 1; $i <= 12; $i++) {
-                $month_day+=self::shMonthDayCount($i, $date1['year']);
+            for ($i = $month1 + 1; $i <= 12; $i++) {
+                $month_day+=self::shMonthDayCount($i, $year1);
             }
             //Day Gap
-            for ($i = 1; $i < $date2['day']; $i++) {
+            for ($i = 1; $i <= $day2; $i++) {
                 $day+=1;
             }
-            for ($i = $date1['day'] + 1; $i <= self::shMonthDayCount($date1['month'], $date1['year']); $i++) {
+            for ($i = $day1 + 1; $i <= self::shMonthDayCount($month1, $year1); $i++) {
                 $day+=1;
-            }
-            //Hour Gap
-            for ($i = 0; $i < $date2['hour']; $i++) {
-                $hour-=1;
-            }
-            for ($i = $date1['hour'] + 1; $i <= 23; $i++) {
-                $hour-=1;
-            }
-            //Minute Gap
-            for ($i = 0; $i < $date2['minute']; $i++) {
-                $minute-=1;
-            }
-            for ($i = $date1['minute'] + 1; $i <= 59; $i++) {
-                $minute-=1;
-            }
-            //Second Gap
-            for ($i = 0; $i < $date2['second']; $i++) {
-                $second-=1;
-            }
-            for ($i = $date1['second']; $i <= 59; $i++) {
-                $second-=1;
             }
 
             $total_day = ($year_day + $month_day + $day) * (-1);
-        } else if ($date1['year'] == $date2['year']) {
+        } else if ($year1 == $year2) {
             //Month Gap
-            for ($i = 1; $i < $date1['month']; $i++) {
-                $date1_month_day+=self::shMonthDayCount($i, $date1['year']);
+            for ($i = 1; $i < $month1; $i++) {
+                $date1_month_day+=self::shMonthDayCount($i, $year1);
             }
-            for ($i = 1; $i < $date2['month']; $i++) {
-                $date2_month_day+=self::shMonthDayCount($i, $date1['year']);
+            for ($i = 1; $i < $month2; $i++) {
+                $date2_month_day+=self::shMonthDayCount($i, $year1);
             }
             //Day Gap
-            for ($i = 1; $i < $date1['day']; $i++) {
+            for ($i = 1; $i < $day1; $i++) {
                 $date1_day+=1;
             }
-            for ($i = 1; $i < $date2['day']; $i++) {
+            for ($i = 1; $i < $day2; $i++) {
                 $date2_day+=1;
             }
-            //Hour Gap
-            for ($i = 0; $i < $date1['hour']; $i++) {
-                $hour1+=1;
-            }
-            for ($i = 0; $i < $date2['hour']; $i++) {
-                $hour2+=1;
-            }
-            //Minute Gap
-            for ($i = 0; $i < $date1['minute']; $i++) {
-                $minute1+=1;
-            }
-            for ($i = 0; $i < $date2['minute']; $i++) {
-                $minute2+=1;
-            }
-            //Second Gap
-            for ($i = 0; $i <= $date1['second']; $i++) {
-                $second1+=1;
-            }
-            for ($i = 0; $i <= $date2['second']; $i++) {
-                $second2+=1;
-            }
 
-            $hour = $hour1 - $hour2;
-            $minute = $minute1 - $minute2;
-            $second = $second1 - $second2;
             $total_day = ($date1_month_day + $date1_day ) - ($date2_month_day + $date2_day );
         }
 
-        return ($total_day * 24 * 60 * 60) + ($hour * 60 * 60) + ($minute * 60) + $second;
+        return $total_day;
     }
 
     /**

@@ -3,35 +3,24 @@
 require_once 'BaseCalendar.php';
 
 /**
- * This class will convert Gregorian to unix and vise versa.
+ * Gregorian calendar required methods for converting and reverting to or from Millenium(2000-01-01)
  *
  * @author Farhad Kia
  */
 class Gregorian extends BaseCalendar {
 
-    /**
-     * Covert Gregorian date to Unix time stamp.
-     * @param string $format format of date string.
-     * @param string $date A date for convert to Unix timestamp.
-     * @return int return Unix timestamp.
-     */
-    public function convertToUnixTimeStamp($format, $date) {
-//        if (isset($format)) {
-//            $date = DateTime::createFromFormat($format, $date);
-//            return strtotime($date->format("Y-m-d H:i:s"));
-//        }
-//        else
-        return strtotime($date);
+    public function gapUntilMillenium($year, $month, $day) {
+        $datetime1 = date_create('2000-01-01');
+        $datetime2 = date_create(str_pad($year, 4, '0', STR_PAD_LEFT) . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-' . str_pad($day, 2, '0', STR_PAD_LEFT));
+        $interval = date_diff($datetime1, $datetime2);
+        return (int) $interval->format('%R%a');
     }
 
-    /**
-     * Revert timestamp to Gregorian date.
-     * @param string $format format of returning result.
-     * @param string $timestamp Unix timestamp.
-     * @return string return date in given format.
-     */
-    public function revertFromUnixTimeStamp($format, $timestamp) {
-        return date($format, $timestamp);
+    public function revertFromMillenium($daysUntilMillenium) {
+        $date = new DateTime('2000-01-01');
+        if ($daysUntilMillenium >= 0) $date->add(new DateInterval('P' . $daysUntilMillenium . 'D')); // P1D means a period of 1 day
+        else $date->sub(new DateInterval('P' . ($daysUntilMillenium * -1) . 'D'));
+        return date_parse_from_format('Y-m-d', $date->format('Y-m-d'));
     }
 
 }
