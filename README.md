@@ -11,11 +11,10 @@ to each other. gCal try to find the count of days between source calendar and Mi
 the destination calendar according to this gap.
 
 For example, in order to convert 1392/05/28 from Solar Hijri to Gregorian we do this stuff
+
 1.  Find equivalent to millenium(2000-01-01) in Solar Hijri.(1378-10-11 is equal to 2000-01-01)
-2.  Calculate count of days between 1392/05/28 and 1378-10-11 (Should be positive or negative).
-    We do this in `gapUntilMillenium` method and result should be 4979.
-3.  Calculate destination calendar by adding 4979 to equivalent millenium date(In Gregorian 2000-01-01 is
-    equal to millenium(2000-01-01)).We do this in `revertFromMillenium` method and result should be 2013-08-19.
+2.  Calculate count of days between 1392/05/28 and 1378-10-11 (Should be positive or negative). We do this in `gapUntilMillenium` method and result should be 4979.
+3.  Calculate destination calendar by adding 4979 to equivalent millenium date(In Gregorian 2000-01-01 is equal to millenium(2000-01-01)).We do this in `revertFromMillenium` method and result should be 2013-08-19.
 
 How to add your calendar
 ------------------------
