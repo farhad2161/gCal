@@ -6,7 +6,7 @@ Php Global Calendar Convert - convert all calendar type to each other so simple.
 What is gCal
 ------------
 
-Global calendar is simple code to translate all calendars like Solar Hijri(Shamsi,Jalali,... ), Gregorian and ...
+Global calendar is simple code to convert all calendars like Solar Hijri(Shamsi,Jalali,... ), Gregorian and ...
 to each other. gCal try to find the count of days between source calendar and Millenium(2000-01-01), then calculate the
 the destination calendar according to this gap.
 
