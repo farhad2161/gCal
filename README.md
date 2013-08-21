@@ -57,5 +57,4 @@ Request for pull or fork and add your calendar.
 Thanks
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/farhad2161/gcal/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/1b95174ee3f8853eccfaca4745569f0e "githalytics.com")](http://githalytics.com/farhad2161/gCal)
-
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/17ec249055100e033aed8d5ab67177a2 "githalytics.com")](http://githalytics.com/farhad2161/gcal)
