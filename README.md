@@ -55,3 +55,6 @@ More
 ----
 Request for pull or fork and add your calendar.
 Thanks
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/farhad2161/gcal/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
